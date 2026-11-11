@@ -1,8 +1,8 @@
 import React from 'react';
-import { Layers, History, Sparkles, Download, Code2 } from 'lucide-react';
+import { Layers, History, Sparkles, Download, Settings } from 'lucide-react';
 import { getExportPdfUrl } from '../services/api';
 
-export default function Navbar({ onOpenHistory, historyCount, currentReport }) {
+export default function Navbar({ onOpenHistory, historyCount, currentReport, onOpenSettings, provider }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -24,12 +24,12 @@ export default function Navbar({ onOpenHistory, historyCount, currentReport }) {
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           {currentReport && (
             <a
               href={getExportPdfUrl(currentReport.id)}
               download
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition-colors"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Export PDF</span>
@@ -37,13 +37,23 @@ export default function Navbar({ onOpenHistory, historyCount, currentReport }) {
           )}
 
           <button
+            onClick={onOpenSettings}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors"
+            title="Configure AI Engine & API Keys"
+          >
+            <Settings className="h-3.5 w-3.5 text-slate-400" />
+            <span className="hidden sm:inline">AI Engine:</span>
+            <span className="uppercase text-[10px] text-indigo-400 font-bold">{provider}</span>
+          </button>
+
+          <button
             onClick={onOpenHistory}
             className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors"
           >
             <History className="h-3.5 w-3.5 text-slate-400" />
-            <span>History</span>
+            <span className="hidden sm:inline">History</span>
             {historyCount > 0 && (
-              <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 {historyCount}
               </span>
             )}

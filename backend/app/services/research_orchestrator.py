@@ -39,7 +39,12 @@ class ResearchOrchestrator:
         citations = self.search_service.search_market_context(query)
 
         # Step 2: LLM Synthesis with JSON Schema validation
-        report = self.llm_service.generate_market_report(query, citations)
+        report = self.llm_service.generate_market_report(
+            query=query,
+            citations=citations,
+            provider_override=request.provider,
+            api_key_override=request.api_key
+        )
         report.id = report_id
         report.created_at = created_at
 
@@ -50,7 +55,7 @@ class ResearchOrchestrator:
                 query=report.query,
                 company_name=report.overview.name,
                 industry=report.overview.industry,
-                tam_summary=f"{report.market_sizing.tam_unit}{report.market_sizing.tam_value}B TAM",
+                tam_summary=f"${report.market_sizing.tam_value}B TAM",
                 data_json=report.model_dump_json(),
                 created_at=datetime.now(timezone.utc)
             )

@@ -24,26 +24,21 @@ class SearchService:
 
     def search_market_context(self, target: str) -> List[SourceCitation]:
         """
-        Executes targeted search queries across multiple dimensions of market research:
-        1. Company profile and business model
-        2. Market size (TAM/SAM) and industry growth
-        3. Competitors and market landscape
+        Executes targeted search query across market research dimensions.
         """
         queries = [
-            f"{target} market size TAM growth revenue",
-            f"{target} competitors alternatives market share comparison",
-            f"{target} SWOT analysis business model overview"
+            f"{target} market size TAM competitors revenue overview"
         ]
 
         citations: List[SourceCitation] = []
         seen_urls = set()
 
         try:
-            from duckduckgo_search import DDGS
-            with DDGS() as ddgs:
+            from ddgs import DDGS
+            with DDGS(timeout=8) as ddgs:
                 for q in queries:
                     try:
-                        results = list(ddgs.text(q, max_results=self.max_results_per_query))
+                        results = list(ddgs.text(q, max_results=5))
                         for r in results:
                             url = r.get("href") or r.get("link", "")
                             if not url or url in seen_urls:
@@ -62,7 +57,7 @@ class SearchService:
                     except Exception as q_err:
                         logger.warning(f"Failed query '{q}': {q_err}")
         except Exception as e:
-            logger.warning(f"DuckDuckGo search unavailable or rate-limited: {e}. Using synthetic grounding fallback.")
+            logger.warning(f"DDGS search unavailable or rate-limited: {e}. Using synthetic grounding fallback.")
 
         # If live search is blocked, rate-limited, or returned no results,
         # provide reliable simulated citations so the pipeline never breaks

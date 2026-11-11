@@ -50,8 +50,8 @@ export default function TamSamSomCalculator({ sizing }) {
             <span className="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Total Demand</span>
           </div>
           <div className="mt-3 flex items-baseline gap-1">
-            <span className="text-3xl font-extrabold text-white">{sizing.tam_unit}{sizing.tam_value}</span>
-            <span className="text-sm font-semibold text-slate-400">Billion</span>
+            <span className="text-3xl font-extrabold text-white">${sizing.tam_value}B</span>
+            <span className="text-sm font-semibold text-slate-400">Total</span>
           </div>
           <p className="mt-2 text-xs text-slate-400 line-clamp-3 leading-relaxed">
             {sizing.tam_methodology}
@@ -68,8 +68,8 @@ export default function TamSamSomCalculator({ sizing }) {
             </span>
           </div>
           <div className="mt-3 flex items-baseline gap-1">
-            <span className="text-3xl font-extrabold text-white">{sizing.sam_unit}{sizing.sam_value}</span>
-            <span className="text-sm font-semibold text-slate-400">Billion</span>
+            <span className="text-3xl font-extrabold text-white">${sizing.sam_value}B</span>
+            <span className="text-sm font-semibold text-slate-400">Target</span>
           </div>
           <p className="mt-2 text-xs text-slate-400 line-clamp-3 leading-relaxed">
             {sizing.sam_methodology}
@@ -86,8 +86,8 @@ export default function TamSamSomCalculator({ sizing }) {
             </span>
           </div>
           <div className="mt-3 flex items-baseline gap-1">
-            <span className="text-3xl font-extrabold text-white">{sizing.som_unit}{sizing.som_value}</span>
-            <span className="text-sm font-semibold text-slate-400">Billion</span>
+            <span className="text-3xl font-extrabold text-white">${sizing.som_value}B</span>
+            <span className="text-sm font-semibold text-slate-400">Attainable</span>
           </div>
           <p className="mt-2 text-xs text-slate-400 line-clamp-3 leading-relaxed">
             {sizing.som_methodology}

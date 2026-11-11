@@ -12,13 +12,19 @@
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
-export async function generateResearch(query, focus = 'full') {
+export async function generateResearch(query, focus = 'full', provider = null, apiKey = null) {
+  const payload = { query, focus };
+  if (provider && provider !== 'mock') {
+    payload.provider = provider;
+    if (apiKey) payload.api_key = apiKey;
+  }
+
   const response = await fetch(`${API_BASE_URL}/research/generate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query, focus }),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {

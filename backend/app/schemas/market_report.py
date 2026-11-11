@@ -124,6 +124,8 @@ class ResearchRequest(BaseModel):
     """Payload sent by the frontend to trigger research."""
     query: str = Field(..., min_length=2, max_length=200, description="Company or industry name")
     focus: Optional[str] = Field("full", description="Focus area: 'full', 'competitors', or 'tam'")
+    provider: Optional[str] = Field(None, description="Optional override: 'openai', 'gemini', 'groq', or 'mock'")
+    api_key: Optional[str] = Field(None, description="Optional user-provided API key")
 
 
 class ReportListItem(BaseModel):

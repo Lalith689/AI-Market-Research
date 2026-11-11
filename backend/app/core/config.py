@@ -20,10 +20,11 @@ class Settings(BaseSettings):
     PORT: int = 8000
     HOST: str = "127.0.0.1"
 
-    # LLM Settings: 'openai', 'gemini', or 'mock'
+    # LLM Settings: 'openai', 'gemini', 'groq', or 'mock'
     LLM_PROVIDER: str = "mock"
     OPENAI_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
 
     # Database
     DATABASE_URL: str = "sqlite:///./marketlens.sqlite3"

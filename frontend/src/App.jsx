@@ -9,6 +9,7 @@ import CustomerSegments from './components/CustomerSegments';
 import StrategicRecommendations from './components/StrategicRecommendations';
 import SourcesList from './components/SourcesList';
 import HistoryDrawer from './components/HistoryDrawer';
+import SettingsModal from './components/SettingsModal';
 import {
   generateResearch,
   fetchReports,
@@ -23,6 +24,19 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // User-configured LLM provider & API key (persisted in localStorage)
+  const [provider, setProvider] = useState(() => localStorage.getItem('marketlens_provider') || 'mock');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('marketlens_api_key') || '');
+
+  useEffect(() => {
+    localStorage.setItem('marketlens_provider', provider);
+  }, [provider]);
+
+  useEffect(() => {
+    localStorage.setItem('marketlens_api_key', apiKey);
+  }, [apiKey]);
 
   // Load existing reports on first visit
   useEffect(() => {
@@ -40,7 +54,7 @@ export default function App() {
         setCurrentReport(latest);
       } else if (history.length === 0 && !currentReport) {
         // Kick off an initial sample report for instant demo polish
-        handleSearch('Linear');
+        handleSearch('Figma');
       }
     } catch (err) {
       console.warn('Could not connect to backend on initial load. Ensure backend is running.', err);
@@ -51,7 +65,7 @@ export default function App() {
     setIsLoading(true);
     setError(null);
     try {
-      const report = await generateResearch(query);
+      const report = await generateResearch(query, 'full', provider, apiKey);
       setCurrentReport(report);
       // Refresh history list in background
       const updatedHistory = await fetchReports();
@@ -96,6 +110,8 @@ export default function App() {
         onOpenHistory={() => setIsHistoryOpen(true)}
         historyCount={reportsHistory.length}
         currentReport={currentReport}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        provider={provider}
       />
 
       {/* Main Container */}
@@ -112,7 +128,7 @@ export default function App() {
               <span>{error}</span>
             </div>
             <button
-              onClick={() => handleSearch('Cursor')}
+              onClick={() => handleSearch('Figma')}
               className="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 rounded-lg text-xs font-medium text-rose-200 transition-colors"
             >
               Retry
@@ -153,6 +169,16 @@ export default function App() {
         )}
 
       </main>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        provider={provider}
+        setProvider={setProvider}
+        apiKey={apiKey}
+        setApiKey={setApiKey}
+      />
 
       {/* History Slide-Over Drawer */}
       <HistoryDrawer
