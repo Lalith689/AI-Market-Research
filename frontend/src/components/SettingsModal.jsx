@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, X, Key, Cpu, ExternalLink, Check } from 'lucide-react';
+import { X, Key, ExternalLink, Check } from 'lucide-react';
 
 export default function SettingsModal({
   isOpen,
@@ -16,116 +16,111 @@ export default function SettingsModal({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-xl p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-              <Settings className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">AI Provider Configuration</h3>
-              <p className="text-xs text-slate-400">Choose your intelligence engine & API keys</p>
-            </div>
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-800/80">
+          <div>
+            <h3 className="text-sm font-semibold text-zinc-100">AI Engine Configuration</h3>
+            <p className="text-[11px] text-zinc-400">Select model provider & configure API credentials</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Provider Selection */}
-        <div className="space-y-3">
-          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block">
-            Select Active AI Engine
+        {/* Engine Grid */}
+        <div className="space-y-2">
+          <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 font-semibold block">
+            Select Active Engine
           </label>
 
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-2 gap-2">
             
-            {/* Grounded Heuristic (Free/Offline) */}
+            {/* Grounded Offline */}
             <button
               type="button"
               onClick={() => setProvider('mock')}
-              className={`p-3 rounded-xl border text-left transition-all ${
+              className={`p-2.5 rounded-lg border text-left transition-all ${
                 provider === 'mock'
-                  ? 'bg-indigo-600/10 border-indigo-500 text-white shadow-sm shadow-indigo-500/10'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-zinc-900 border-zinc-500 text-white'
+                  : 'bg-zinc-950/80 border-zinc-800 text-zinc-400 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Grounded Offline</span>
-                {provider === 'mock' && <Check className="h-4 w-4 text-indigo-400" />}
+                <span className="text-xs font-medium text-zinc-100">Grounded Offline</span>
+                {provider === 'mock' && <Check className="h-3.5 w-3.5 text-zinc-100" />}
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">Live web search + entity extraction. Zero API key needed.</p>
+              <p className="text-[10px] text-zinc-500 mt-0.5">Wikipedia + local extraction. Free.</p>
             </button>
 
-            {/* Groq (Llama 3.3 70B - Free tier) */}
+            {/* Groq Llama 3.3 */}
             <button
               type="button"
               onClick={() => setProvider('groq')}
-              className={`p-3 rounded-xl border text-left transition-all ${
+              className={`p-2.5 rounded-lg border text-left transition-all ${
                 provider === 'groq'
-                  ? 'bg-indigo-600/10 border-indigo-500 text-white shadow-sm shadow-indigo-500/10'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-zinc-900 border-zinc-500 text-white'
+                  : 'bg-zinc-950/80 border-zinc-800 text-zinc-400 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Groq (Llama 3.3)</span>
-                {provider === 'groq' && <Check className="h-4 w-4 text-indigo-400" />}
+                <span className="text-xs font-medium text-zinc-100">Groq (Llama 3.3)</span>
+                {provider === 'groq' && <Check className="h-3.5 w-3.5 text-zinc-100" />}
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">Ultra-fast inference. Free API tier available.</p>
+              <p className="text-[10px] text-zinc-500 mt-0.5">Ultra-fast. Free tier available.</p>
             </button>
 
             {/* OpenAI */}
             <button
               type="button"
               onClick={() => setProvider('openai')}
-              className={`p-3 rounded-xl border text-left transition-all ${
+              className={`p-2.5 rounded-lg border text-left transition-all ${
                 provider === 'openai'
-                  ? 'bg-indigo-600/10 border-indigo-500 text-white shadow-sm shadow-indigo-500/10'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-zinc-900 border-zinc-500 text-white'
+                  : 'bg-zinc-950/80 border-zinc-800 text-zinc-400 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white">OpenAI (GPT-4o)</span>
-                {provider === 'openai' && <Check className="h-4 w-4 text-indigo-400" />}
+                <span className="text-xs font-medium text-zinc-100">OpenAI (GPT-4o)</span>
+                {provider === 'openai' && <Check className="h-3.5 w-3.5 text-zinc-100" />}
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">High-reasoning frontier models.</p>
+              <p className="text-[10px] text-zinc-500 mt-0.5">Frontier reasoning models.</p>
             </button>
 
             {/* Google Gemini */}
             <button
               type="button"
               onClick={() => setProvider('gemini')}
-              className={`p-3 rounded-xl border text-left transition-all ${
+              className={`p-2.5 rounded-lg border text-left transition-all ${
                 provider === 'gemini'
-                  ? 'bg-indigo-600/10 border-indigo-500 text-white shadow-sm shadow-indigo-500/10'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-zinc-900 border-zinc-500 text-white'
+                  : 'bg-zinc-950/80 border-zinc-800 text-zinc-400 hover:border-zinc-700'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white">Google Gemini</span>
-                {provider === 'gemini' && <Check className="h-4 w-4 text-indigo-400" />}
+                <span className="text-xs font-medium text-zinc-100">Google Gemini</span>
+                {provider === 'gemini' && <Check className="h-3.5 w-3.5 text-zinc-100" />}
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">Gemini 1.5 Flash. Free tier on AI Studio.</p>
+              <p className="text-[10px] text-zinc-500 mt-0.5">Gemini 1.5 Flash. Free tier.</p>
             </button>
 
           </div>
         </div>
 
-        {/* API Key Input (if not mock) */}
+        {/* API Key Input */}
         {provider !== 'mock' && (
-          <div className="space-y-2 pt-2">
+          <div className="space-y-1.5 pt-1">
             <div className="flex items-center justify-between text-xs">
-              <label className="font-semibold text-slate-300 flex items-center gap-1.5">
-                <Key className="h-3.5 w-3.5 text-indigo-400" />
+              <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 font-medium flex items-center gap-1">
+                <Key className="h-3 w-3 text-zinc-400" />
                 <span>{provider.toUpperCase()} API Key:</span>
               </label>
               {provider === 'groq' && (
@@ -133,9 +128,9 @@ export default function SettingsModal({
                   href="https://console.groq.com/keys"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-[11px]"
+                  className="text-zinc-400 hover:text-zinc-200 flex items-center gap-1 text-[10px] font-mono"
                 >
-                  Get free Groq key <ExternalLink className="h-3 w-3" />
+                  Get free key <ExternalLink className="h-2.5 w-2.5" />
                 </a>
               )}
               {provider === 'gemini' && (
@@ -143,9 +138,9 @@ export default function SettingsModal({
                   href="https://aistudio.google.com/app/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-[11px]"
+                  className="text-zinc-400 hover:text-zinc-200 flex items-center gap-1 text-[10px] font-mono"
                 >
-                  Get free Gemini key <ExternalLink className="h-3 w-3" />
+                  Get free key <ExternalLink className="h-2.5 w-2.5" />
                 </a>
               )}
             </div>
@@ -153,22 +148,22 @@ export default function SettingsModal({
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder={`Enter your ${provider} API key (e.g. gsk_... or sk-...)`}
-              className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
+              placeholder={`Enter your ${provider} key (e.g. gsk_... or sk-...)`}
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-1.5 text-xs text-zinc-100 font-mono placeholder:text-zinc-600 focus:outline-none focus:border-zinc-500"
             />
-            <p className="text-[10px] text-slate-500">
-              Your key is saved locally in your browser storage and never logged to external disks.
+            <p className="text-[10px] text-zinc-500 font-mono">
+              Stored locally in browser localStorage.
             </p>
           </div>
         )}
 
         {/* Action Button */}
-        <div className="pt-3 border-t border-slate-800 flex justify-end">
+        <div className="pt-2 border-t border-zinc-800/80 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all"
+            className="px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-medium transition-colors"
           >
-            Save & Close
+            Apply & Close
           </button>
         </div>
 

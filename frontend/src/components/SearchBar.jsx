@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import { Search, Loader2, CornerDownLeft } from 'lucide-react';
 
 const PRESETS = [
-  'Cursor',
-  'Linear',
-  'Stripe',
+  'Reliance Jio',
   'Figma',
+  'Stripe',
+  'Linear',
   'Datadog',
-  'AI Coding Agents'
+  'Airtel'
 ];
 
 const LOADING_STEPS = [
-  'Querying web indices for live market signals...',
-  'Extracting competitors and pricing benchmarks...',
-  'Calculating TAM, SAM & SOM formula models...',
-  'Synthesizing SWOT matrix & buyer personas...',
-  'Compiling executive report with verified citations...'
+  'Querying Wikipedia and live market indices...',
+  'Extracting market metrics, revenues & competitors...',
+  'Computing TAM, SAM & SOM formula assumptions...',
+  'Structuring strategic SWOT quadrants & personas...',
+  'Synthesizing final executive intelligence report...'
 ];
 
 export default function SearchBar({ onSearch, isLoading }) {
@@ -29,7 +29,7 @@ export default function SearchBar({ onSearch, isLoading }) {
     }
     const interval = setInterval(() => {
       setStepIndex((prev) => (prev < LOADING_STEPS.length - 1 ? prev + 1 : prev));
-    }, 1500);
+    }, 1400);
     return () => clearInterval(interval);
   }, [isLoading]);
 
@@ -46,76 +46,79 @@ export default function SearchBar({ onSearch, isLoading }) {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8 px-4 sm:px-6">
+    <div className="w-full max-w-3xl mx-auto pt-6 pb-4">
+      {/* Editorial Header - Restrained, clean, institutional */}
       <div className="text-center mb-6">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Strategic Intelligence, <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Grounded in Data</span>
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-100">
+          Strategic Market Intelligence
         </h1>
-        <p className="mt-2 text-sm sm:text-base text-slate-400">
-          Enter any company, startup, or market sector to generate an investor-grade research report.
+        <p className="mt-1.5 text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto">
+          Structured competitive landscapes, addressable market sizing, and strategic analysis for any global enterprise.
         </p>
       </div>
 
       {/* Main Search Input Form */}
-      <form onSubmit={handleSubmit} className="relative group">
-        <div className="relative flex items-center bg-slate-900/90 border border-slate-700/80 rounded-2xl p-2 shadow-2xl shadow-indigo-950/40 focus-within:border-indigo-500/80 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
-          <div className="pl-3 pr-2 text-slate-400">
-            <Search className="h-5 w-5" />
+      <form onSubmit={handleSubmit} className="relative">
+        <div className="relative flex items-center bg-zinc-900/90 border border-zinc-800 rounded-lg p-1.5 shadow-sm transition-all focus-within:border-zinc-600 focus-within:ring-1 focus-within:ring-zinc-600">
+          
+          <div className="pl-3 pr-2 text-zinc-500">
+            <Search className="h-4 w-4" />
           </div>
+
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             disabled={isLoading}
-            placeholder="e.g. Cursor, Stripe, AI Code Generation, Cybersecurity..."
-            className="w-full bg-transparent border-none text-white text-base sm:text-lg placeholder:text-slate-500 focus:outline-none focus:ring-0 disabled:opacity-50"
+            placeholder="Search any company, ticker, or vertical (e.g. Reliance Jio, Figma, Stripe)..."
+            className="w-full bg-transparent border-none text-zinc-100 text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-0 disabled:opacity-50"
           />
+
           <button
             type="submit"
             disabled={!query.trim() || isLoading}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-indigo-600/30 flex-shrink-0"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-medium text-xs transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin text-white" />
-                <span className="hidden sm:inline">Researching...</span>
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-zinc-900" />
+                <span>Researching</span>
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4 text-indigo-200" />
-                <span>Generate Report</span>
-                <ArrowRight className="h-4 w-4 hidden sm:inline" />
+                <span>Analyze</span>
+                <CornerDownLeft className="h-3 w-3 text-zinc-500" />
               </>
             )}
           </button>
         </div>
       </form>
 
-      {/* Animated Loading Status */}
+      {/* Loading state tracker */}
       {isLoading && (
-        <div className="mt-4 p-4 rounded-xl bg-slate-900/60 border border-indigo-500/30 text-center animate-pulse">
-          <div className="flex items-center justify-center gap-2 text-indigo-400 text-xs sm:text-sm font-medium">
-            <Loader2 className="h-4 w-4 animate-spin" />
+        <div className="mt-3 p-3 rounded-lg bg-zinc-900/60 border border-zinc-800/80 text-center">
+          <div className="flex items-center justify-center gap-2 text-zinc-300 text-xs font-mono">
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-zinc-400" />
             <span>{LOADING_STEPS[stepIndex]}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden max-w-md mx-auto">
+          <div className="w-full bg-zinc-800 h-1 rounded-full mt-2.5 overflow-hidden max-w-xs mx-auto">
             <div
-              className="bg-indigo-500 h-full transition-all duration-700 ease-out"
+              className="bg-zinc-300 h-full transition-all duration-500 ease-out"
               style={{ width: `${((stepIndex + 1) / LOADING_STEPS.length) * 100}%` }}
             />
           </div>
         </div>
       )}
 
-      {/* Preset Suggested Queries */}
+      {/* Minimal presets */}
       {!isLoading && (
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Try researching:</span>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">
+          <span className="text-[11px] text-zinc-500 font-mono">Quick test:</span>
           {PRESETS.map((preset) => (
             <button
               key={preset}
               onClick={() => handlePresetClick(preset)}
-              className="text-xs px-2.5 py-1 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all"
+              className="text-[11px] px-2 py-0.5 rounded text-zinc-400 hover:text-zinc-200 bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800/60 hover:border-zinc-700 transition-colors"
             >
               {preset}
             </button>

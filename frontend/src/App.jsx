@@ -103,7 +103,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-zinc-800 selection:text-white">
       
       {/* Navbar */}
       <Navbar
@@ -115,21 +115,21 @@ export default function App() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
         
         {/* Search & Intelligence Input */}
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
 
         {/* Error Alert */}
         {error && (
-          <div className="max-w-4xl mx-auto bg-rose-950/40 border border-rose-500/40 rounded-xl p-4 flex items-center justify-between text-rose-300 text-sm">
+          <div className="max-w-3xl mx-auto bg-zinc-900/90 border border-zinc-800 rounded-lg p-3 flex items-center justify-between text-zinc-200 text-xs">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <AlertCircle className="h-4 w-4 text-zinc-400 flex-shrink-0" />
               <span>{error}</span>
             </div>
             <button
-              onClick={() => handleSearch('Figma')}
-              className="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 rounded-lg text-xs font-medium text-rose-200 transition-colors"
+              onClick={() => handleSearch('Reliance Jio')}
+              className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-[11px] font-medium text-zinc-200 transition-colors"
             >
               Retry
             </button>
@@ -138,7 +138,7 @@ export default function App() {
 
         {/* Active Research Report Dashboard */}
         {currentReport && !isLoading && (
-          <div className="space-y-8 animate-in fade-in duration-500">
+          <div className="space-y-6 animate-in fade-in duration-300">
             
             {/* Header & Executive Summary */}
             <ReportHeader
@@ -189,12 +189,10 @@ export default function App() {
         onDeleteReport={handleDeleteReport}
       />
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 space-y-2">
-        <p>
-          <strong className="text-slate-400">MarketLens AI</strong> — Built with React, FastAPI, Pydantic, SQLAlchemy & ReportLab.
-        </p>
-        <p>Architected for deterministic structured outputs, live web grounding, and real-time sensitivity analysis.</p>
+      {/* Minimal Institutional Footer */}
+      <footer className="mt-auto border-t border-zinc-900 bg-zinc-950 py-6 text-center text-xs text-zinc-500 space-y-1">
+        <p className="font-mono text-[11px] text-zinc-400">MarketLens — Strategic Intelligence Platform</p>
+        <p className="text-[10px] text-zinc-600 font-mono">React 19 • FastAPI • Pydantic Structured Contracts • SQLAlchemy</p>
       </footer>
 
     </div>

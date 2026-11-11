@@ -1,68 +1,49 @@
 import React from 'react';
-import { Target, DollarSign, Megaphone, AlertCircle } from 'lucide-react';
 
 export default function CustomerSegments({ segments }) {
-  const getWtpBadge = (wtp) => {
-    const val = (wtp || '').toLowerCase();
-    if (val.includes('very high') || val.includes('enterprise')) {
-      return 'bg-purple-500/10 text-purple-300 border-purple-500/30';
-    }
-    if (val.includes('high')) {
-      return 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30';
-    }
-    return 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30';
-  };
-
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl space-y-6">
+    <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-5 sm:p-7 space-y-5">
       
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-pink-500/10 text-pink-400 border border-pink-500/20">
-            <Target className="h-5 w-5" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-white tracking-tight">Customer Segmentation & ICP Personas</h3>
-            <p className="text-xs text-slate-400">Target buyer profiles, willingness to pay, and acquisition channels</p>
-          </div>
+      <div className="flex items-center justify-between pb-4 border-b border-zinc-800/70">
+        <div>
+          <h3 className="text-base sm:text-lg font-semibold text-zinc-100 tracking-tight">Customer Segmentation & ICP Personas</h3>
+          <p className="text-xs text-zinc-400 mt-0.5">Target buyer profiles, price tolerance, pain points, and distribution channels</p>
         </div>
       </div>
 
       {/* Segments Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {segments.map((seg, idx) => (
           <div
             key={idx}
-            className="bg-slate-950/70 border border-slate-800 rounded-xl p-5 space-y-4 hover:border-slate-700 transition-all flex flex-col justify-between"
+            className="bg-zinc-950/70 border border-zinc-800/80 rounded-lg p-4 space-y-3 flex flex-col justify-between"
           >
             <div>
               {/* Persona Title & Willingness to Pay */}
-              <div className="flex items-start justify-between gap-2 pb-3 border-b border-slate-800/80">
+              <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-zinc-800/70">
                 <div>
-                  <h4 className="text-base font-bold text-white">{seg.persona}</h4>
-                  <p className="text-xs text-slate-400 mt-0.5 leading-snug">{seg.description}</p>
+                  <h4 className="text-sm font-bold text-zinc-100 tracking-tight">{seg.persona}</h4>
+                  <p className="text-xs text-zinc-400 mt-0.5 leading-snug">{seg.description}</p>
                 </div>
               </div>
 
-              {/* Willingness to pay banner */}
-              <div className="mt-3 flex items-center justify-between bg-slate-900/60 px-3 py-2 rounded-lg border border-slate-800 text-xs">
-                <span className="text-slate-400 flex items-center gap-1">
-                  <DollarSign className="h-3.5 w-3.5 text-emerald-400" /> Willingness to Pay:
-                </span>
-                <span className={`px-2 py-0.5 rounded-full font-semibold border ${getWtpBadge(seg.willingness_to_pay)}`}>
+              {/* Willingness to Pay Strip */}
+              <div className="mt-2.5 flex items-center justify-between bg-zinc-900/50 px-2.5 py-1.5 rounded border border-zinc-800/60 text-xs">
+                <span className="text-zinc-400 text-[11px] font-mono">Willingness to Pay:</span>
+                <span className="px-2 py-0.2 rounded text-[10px] font-mono bg-zinc-800 text-zinc-200 border border-zinc-700">
                   {seg.willingness_to_pay}
                 </span>
               </div>
 
               {/* Pain points */}
-              <div className="mt-3 space-y-1.5">
-                <span className="text-[10px] font-semibold text-rose-400 uppercase tracking-wider flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3" /> Core Pain Points
+              <div className="mt-3 space-y-1">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block font-semibold">
+                  Core Pain Points
                 </span>
                 <ul className="space-y-1">
                   {seg.pain_points.map((p, pIdx) => (
-                    <li key={pIdx} className="text-xs text-slate-300 leading-snug">
+                    <li key={pIdx} className="text-xs text-zinc-300 leading-snug">
                       • {p}
                     </li>
                   ))}
@@ -71,15 +52,15 @@ export default function CustomerSegments({ segments }) {
             </div>
 
             {/* Acquisition channels */}
-            <div className="pt-3 border-t border-slate-800/80">
-              <span className="text-[10px] font-semibold text-indigo-400 uppercase tracking-wider flex items-center gap-1 mb-1.5">
-                <Megaphone className="h-3 w-3" /> Acquisition Channels
+            <div className="pt-2.5 border-t border-zinc-800/70">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block font-semibold mb-1">
+                Acquisition Channels
               </span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {seg.acquisition_channels.map((ch, cIdx) => (
                   <span
                     key={cIdx}
-                    className="text-[11px] px-2 py-0.5 rounded-md bg-slate-900 text-slate-300 border border-slate-800"
+                    className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800"
                   >
                     {ch}
                   </span>
