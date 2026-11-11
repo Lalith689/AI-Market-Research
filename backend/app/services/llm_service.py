@@ -175,31 +175,122 @@ CRITICAL RULES:
         return report
 
     def _call_gemini(self, query: str, citations: List[SourceCitation], api_key: str) -> MarketResearchReport:
-        """Invokes Google Gemini with JSON output mode."""
+        """Invokes Google Gemini with JSON output mode and strict Pydantic parsing."""
         import httpx
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+        
+        # Models supported on this key: gemini-3.5-flash-lite, gemini-3.8-flash
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={api_key}"
+        
         grounding_text = "\n\n".join(
             [f"Source [{c.domain}]: {c.title}\n{c.snippet}" for c in citations]
         )
-        prompt = f"""Generate a factual, rigorous market research report for '{query}'.
-Grounding:
+
+        prompt = f"""You are an elite senior market research director and management consultant.
+Generate an accurate, factual, and comprehensive strategic market research report for: "{query}".
+
+Ground your research in the following live intelligence and encyclopedic data:
 {grounding_text}
-Output valid JSON matching keys: query, executive_summary, overview, market_sizing, competitors, swot, customer_segments, strategic_recommendations."""
+
+CRITICAL RULES:
+1. Provide real-world facts: accurate headquarters city/country, real founded year, real primary industry, and real competitors.
+2. Return ONLY a valid JSON object matching this exact structure:
+{{
+  "query": "{query}",
+  "executive_summary": "Comprehensive 2-3 paragraph executive summary detailing macro sector dynamics, market forces, and strategic trajectory.",
+  "overview": {{
+    "name": "{query}",
+    "industry": "Actual industry vertical",
+    "summary": "Factual 2-3 sentence corporate overview",
+    "business_model": "Actual monetization structure",
+    "value_proposition": "Core differentiated value proposition",
+    "headquarters": "City, Country (e.g. Navi Mumbai, India)",
+    "founded_year": "Actual founding year",
+    "stage": "Public / Conglomerate Subsidiary / Growth",
+    "key_metrics": {{"Key 1": "Value 1", "Key 2": "Value 2", "Key 3": "Value 3", "Key 4": "Value 4"}}
+  }},
+  "market_sizing": {{
+    "tam_value": 45.0,
+    "tam_unit": "$",
+    "tam_methodology": "Clear explanation of Total Addressable Market calculation",
+    "sam_value": 15.0,
+    "sam_unit": "$",
+    "sam_methodology": "Serviceable Addressable Market criteria",
+    "som_value": 3.5,
+    "som_unit": "$",
+    "som_methodology": "Attainable market share assumptions over a 3-year horizon",
+    "default_som_percentage": 5.0,
+    "cagr_rate": 12.5,
+    "cagr_period": "2024-2030",
+    "growth_drivers": ["Growth driver 1", "Growth driver 2", "Growth driver 3"]
+  }},
+  "competitors": [
+    {{
+      "name": "Actual Real Competitor Name",
+      "market_tier": "Market Leader / Direct Challenger / Niche",
+      "strengths": ["Real strength 1", "Real strength 2"],
+      "weaknesses": ["Real vulnerability 1", "Real vulnerability 2"],
+      "estimated_pricing": "Real pricing tier or ARPU benchmark",
+      "differentiator": "Core differentiator"
+    }}
+  ],
+  "swot": {{
+    "strengths": ["Real strength 1", "Real strength 2", "Real strength 3"],
+    "weaknesses": ["Real weakness 1", "Real weakness 2", "Real weakness 3"],
+    "opportunities": ["Real opportunity 1", "Real opportunity 2", "Real opportunity 3"],
+    "threats": ["Real threat 1", "Real threat 2", "Real threat 3"]
+  }},
+  "customer_segments": [
+    {{
+      "persona": "Specific Customer Segment Name",
+      "description": "Specific segment profile",
+      "pain_points": ["Pain point 1", "Pain point 2"],
+      "willingness_to_pay": "High / Medium / Low",
+      "acquisition_channels": ["Channel 1", "Channel 2"]
+    }}
+  ],
+  "strategic_recommendations": [
+    "Strategic recommendation 1",
+    "Strategic recommendation 2",
+    "Strategic recommendation 3"
+  ]
+}}"""
 
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"response_mime_type": "application/json"}
+            "generationConfig": {
+                "response_mime_type": "application/json",
+                "temperature": 0.2
+            }
         }
 
-        with httpx.Client(timeout=40.0) as client:
-            resp = client.post(url, json=payload)
-            resp.raise_for_status()
-            data = resp.json()
-            text_response = data["candidates"][0]["content"]["parts"][0]["text"]
-            raw_json = json.loads(text_response)
-            report = MarketResearchReport.model_validate(raw_json)
-            report.sources = citations
-            return report
+        import time
+        max_retries = 3
+        last_error = None
+
+        with httpx.Client(timeout=35.0) as client:
+            for attempt in range(max_retries):
+                try:
+                    resp = client.post(url, json=payload)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        text_response = data["candidates"][0]["content"]["parts"][0]["text"]
+                        raw_json = json.loads(text_response)
+                        report = MarketResearchReport.model_validate(raw_json)
+                        report.sources = citations
+                        return report
+                    elif resp.status_code in [503, 429]:
+                        logger.warning(f"Gemini API attempt {attempt+1} busy ({resp.status_code}), retrying in 2s...")
+                        time.sleep(2.0)
+                    else:
+                        resp.raise_for_status()
+                except Exception as e:
+                    last_error = e
+                    if attempt < max_retries - 1:
+                        time.sleep(1.5)
+
+        if last_error:
+            raise last_error
+        raise RuntimeError("Gemini API call failed after retries.")
 
     def _generate_intelligent_mock(
         self,
